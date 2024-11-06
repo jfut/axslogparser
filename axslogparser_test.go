@@ -88,6 +88,22 @@ var parseTests = []struct {
 		},
 	},
 	{
+		Name:  "[Apache] common with request timeout",
+		Input: `10.0.0.11 - - [11/Jun/2017:05:56:04 +0900] "-" 408 -`,
+		Output: Log{
+			Host:          "10.0.0.11",
+			RemoteLogname: "-",
+			User:          "-",
+			Time:          time.Date(2017, time.June, 11, 5, 56, 4, 0, loc),
+			Request:       "-",
+			Status:        408,
+			Size:          0,
+			Method:        "",
+			RequestURI:    "",
+			Protocol:      "",
+		},
+	},
+	{
 		Name:  "[Apache] common with vhost",
 		Input: `log.example.com 10.0.0.11 - - [11/Jun/2017:05:56:04 +0900] "GET / HTTP/1.1" 404 741`,
 		Output: Log{

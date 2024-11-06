@@ -40,6 +40,12 @@ func (l *Log) breakdownRequest() error {
 	}
 	stuff := strings.Fields(l.Request)
 	if len(stuff) != 3 {
+		if l.Request == "-" {
+			l.Method = ""
+			l.RequestURI = ""
+			l.Protocol = ""
+			return nil
+		}
 		return fmt.Errorf("invalid request: %s", l.Request)
 	}
 	if len(stuff) > 0 && l.Method == "" {
