@@ -39,13 +39,25 @@ func (l *Log) breakdownRequest() error {
 		return nil
 	}
 	stuff := strings.Fields(l.Request)
-	if len(stuff) != 3 {
-		if l.Request == "-" {
+	if len(stuff) == 0 {
+		l.Method = ""
+		l.RequestURI = ""
+		l.Protocol = ""
+		return nil
+	} else if len(stuff) == 1 {
+		if stuff[0] == "-" {
 			l.Method = ""
 			l.RequestURI = ""
 			l.Protocol = ""
 			return nil
+		} else if len(stuff[0]) > 0 && stuff[0][0] == '{' && l.Request[len(l.Request)-1] == '}' {
+			l.Method = ""
+			l.RequestURI = stuff[0]
+			l.Protocol = ""
+			return nil
 		}
+		return fmt.Errorf("invalid request: %s", l.Request)
+	} else if len(stuff) != 3 {
 		return fmt.Errorf("invalid request: %s", l.Request)
 	}
 	if len(stuff) > 0 && l.Method == "" {

@@ -88,6 +88,38 @@ var parseTests = []struct {
 		},
 	},
 	{
+		Name:  "[Apache] common with bad request (empty)",
+		Input: `10.0.0.11 - - [11/Jun/2017:05:56:04 +0900] "" 400 226`,
+		Output: Log{
+			Host:          "10.0.0.11",
+			RemoteLogname: "-",
+			User:          "-",
+			Time:          time.Date(2017, time.June, 11, 5, 56, 4, 0, loc),
+			Request:       "",
+			Status:        400,
+			Size:          226,
+			Method:        "",
+			RequestURI:    "",
+			Protocol:      "",
+		},
+	},
+	{
+		Name:  "[Apache] common with bad request (JSON-RPC)",
+		Input: `10.0.0.11 - - [11/Jun/2017:05:56:04 +0900] "{\"id\":1,\"method\":\"mining.subscribe\",\"params\":[]}" 400 226`,
+		Output: Log{
+			Host:          "10.0.0.11",
+			RemoteLogname: "-",
+			User:          "-",
+			Time:          time.Date(2017, time.June, 11, 5, 56, 4, 0, loc),
+			Request:       "{\"id\":1,\"method\":\"mining.subscribe\",\"params\":[]}",
+			Status:        400,
+			Size:          226,
+			Method:        "",
+			RequestURI:    "{\"id\":1,\"method\":\"mining.subscribe\",\"params\":[]}",
+			Protocol:      "",
+		},
+	},
+	{
 		Name:  "[Apache] common with request timeout",
 		Input: `10.0.0.11 - - [11/Jun/2017:05:56:04 +0900] "-" 408 -`,
 		Output: Log{
